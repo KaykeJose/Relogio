@@ -408,13 +408,15 @@
     drawFrame(Math.max(currentIdx, 0));
   }
 
+  const ZOOM = 0.62; // <1 deixa o relógio menor na tela, com margem ao redor; 1 = preenche a tela
+
   function drawFrame(idx) {
     const img = images[idx];
     if (!img || !img.complete || img.naturalWidth === 0) return;
     const cw = window.innerWidth, ch = window.innerHeight;
     ctx.clearRect(0, 0, cw, ch);
-    const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+    const fitScale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
+    const dw = img.naturalWidth * fitScale * ZOOM, dh = img.naturalHeight * fitScale * ZOOM;
     const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
     currentIdx = idx;
