@@ -408,7 +408,7 @@
     drawFrame(Math.max(currentIdx, 0));
   }
 
-  const ZOOM = 0.62; // <1 deixa o relógio menor na tela, com margem ao redor; 1 = preenche a tela
+  const ZOOM = 0.8; // <1 deixa o relógio menor na tela, com margem ao redor; 1 = preenche a tela
 
   function drawFrame(idx) {
     const img = images[idx];
@@ -419,6 +419,17 @@
     const dw = img.naturalWidth * fitScale * ZOOM, dh = img.naturalHeight * fitScale * ZOOM;
     const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
     ctx.drawImage(img, dx, dy, dw, dh);
+
+    // Vinheta: disfarça o fundo claro dos frames contra o preto da página
+    const vignette = ctx.createRadialGradient(
+      cw / 2, ch / 2, Math.min(cw, ch) * 0.22,
+      cw / 2, ch / 2, Math.max(cw, ch) * 0.62
+    );
+    vignette.addColorStop(0, 'rgba(0,0,0,0)');
+    vignette.addColorStop(1, 'rgba(0,0,0,1)');
+    ctx.fillStyle = vignette;
+    ctx.fillRect(0, 0, cw, ch);
+
     currentIdx = idx;
   }
 
